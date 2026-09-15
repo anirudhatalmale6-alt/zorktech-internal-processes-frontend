@@ -20,10 +20,24 @@ export interface DashboardSummary {
   overdueTasksDelta: number;
 }
 
-export interface ThroughputPoint {
-  label: string;
-  started: number;
-  completed: number;
+/**
+ * One row of the "by status" breakdown panel.
+ *
+ * `share` is computed on the client from `count` and the overall total rather
+ * than sent by the backend. If both were sent, they could disagree — and a
+ * panel whose percentages don't add to 100 is the kind of thing that gets the
+ * whole dashboard distrusted.
+ */
+export interface StatusBreakdownRow {
+  status: ProcessStatus;
+  count: number;
+}
+
+/** Per-person workload, for the owner panel. */
+export interface OwnerWorkload {
+  owner: string;
+  active: number;
+  blocked: number;
 }
 
 export type ProcessStatus = 'running' | 'blocked' | 'review' | 'completed';

@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { DatePipe, DecimalPipe } from '@angular/common';
 
-import { BarChart, BarSeries } from '../../shared/ui/bar-chart/bar-chart';
 import { Card } from '../../shared/ui/card/card';
 import { CellTemplate, SortState, TableColumn } from '../../shared/ui/data-table/data-table.models';
 import { DataTable } from '../../shared/ui/data-table/data-table';
@@ -14,23 +13,25 @@ import { StatusBadge } from '../../shared/ui/status-badge/status-badge';
 import { DashboardService } from './dashboard.service';
 import {
   DashboardSummary,
+  OwnerWorkload,
   ProcessRow,
   STATUS_LABELS,
   STATUS_TONES,
-  ThroughputPoint,
+  StatusBreakdownRow,
 } from './dashboard.models';
 
 @Component({
   selector: 'zt-dashboard',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    BarChart,
     Card,
     CellTemplate,
     DataTable,
     DatePipe,
+    DecimalPipe,
     PageHeader,
     ProgressBar,
+    RouterLink,
     StatTile,
     StatusBadge,
   ],
@@ -42,41 +43,59 @@ export class Dashboard {
   private readonly router = inject(Router);
 
   readonly summary = signal<DashboardSummary | null>(null);
-  readonly throughput = signal<readonly ThroughputPoint[]>([]);
+  readonly breakdown = signal<readonly StatusBreakdownRow[]>([]);
+  readonly workload = signal<readonly OwnerWorkload[]>([]);
   readonly processes = signal<readonly ProcessRow[]>([]);
 
   readonly summaryLoading = signal(true);
-  readonly chartLoading = signal(true);
+  readonly breakdownLoading = signal(true);
+  readonly workloadLoading = signal(true);
   readonly tableLoading = signal(true);
 
   readonly sort = signal<SortState>({ key: 'updatedAt', direction: 'desc' });
 
   readonly columns: readonly TableColumn<ProcessRow>[] = [
     { key: 'reference', label: 'Reference', width: '8rem', sortable: true },
-    { key: 'name', label: 'Process', width: 'minmax(16rem, 2fr)', sortable: true },
+    { key: 'name', label: 'Process', width: 'minmax(14rem, 2fr)', sortable: true },
     { key: 'status', label: 'Status', width: '9rem' },
-    { key: 'stage', label: 'Current stage', width: 'minmax(10rem, 1fr)' },
+    { key: 'stage', label: 'Current stage', width: 'minmax(9rem, 1fr)' },
     { key: 'progress', label: 'Progress', width: '9rem', align: 'right' },
-    { key: 'owner', label: 'Owner', width: '10rem', sortable: true },
+    { key: 'owner', label: 'Owner', width: '9.5rem', sortable: true },
     { key: 'updatedAt', label: 'Updated', width: '9rem', align: 'right', sortable: true },
   ];
 
-  readonly chartCategories = computed(() => this.throughput().map((point) => point.label));
+  readonly breakdownTotal = computed(() =>
+    this.breakdown().reduce((sum, row) => sum + row.count, 0),
+  );
 
-  readonly chartSeries = computed<readonly BarSeries[]>(() => [
-    {
-      key: 'started',
-      label: 'Started',
-      color: 'var(--brand-primary)',
-      values: this.throughput().map((point) => point.started),
-    },
-    {
-      key: 'completed',
-      label: 'Completed',
-      color: 'var(--brand-secondary)',
-      values: this.throughput().map((point) => point.completed),
-    },
-  ]);
+  /**
+   * Breakdown rows with their share of the total.
+   *
+   * Share is derived here rather than taken from the backend: two numbers that
+   * must agree are two numbers that can disagree, and a panel whose percentages
+   * don't total 100 discredits the whole dashboard.
+   */
+  readonly breakdownRows = computed(() => {
+    const total = this.breakdownTotal();
+
+    return this.breakdown().map((row) => ({
+      ...row,
+      label: STATUS_LABELS[row.status],
+      tone: STATUS_TONES[row.status],
+      // Guard the divide: an empty system is a legitimate state, and 0/0 here
+      // would put NaN% on screen on day one.
+      share: total > 0 ? (row.count / total) * 100 : 0,
+    }));
+  });
+
+  /** Busiest first — the panel exists to show where the load sits. */
+  readonly workloadRows = computed(() =>
+    [...this.workload()].sort((a, b) => b.active - a.active),
+  );
+
+  readonly workloadPeak = computed(() =>
+    Math.max(1, ...this.workloadRows().map((row) => row.active)),
+  );
 
   constructor() {
     this.service
@@ -94,14 +113,25 @@ export class Dashboard {
       });
 
     this.service
-      .getThroughput()
+      .getStatusBreakdown()
       .pipe(takeUntilDestroyed())
       .subscribe({
         next: (data) => {
-          this.throughput.set(data);
-          this.chartLoading.set(false);
+          this.breakdown.set(data);
+          this.breakdownLoading.set(false);
         },
-        error: () => this.chartLoading.set(false),
+        error: () => this.breakdownLoading.set(false),
+      });
+
+    this.service
+      .getOwnerWorkload()
+      .pipe(takeUntilDestroyed())
+      .subscribe({
+        next: (data) => {
+          this.workload.set(data);
+          this.workloadLoading.set(false);
+        },
+        error: () => this.workloadLoading.set(false),
       });
 
     this.service
@@ -122,6 +152,11 @@ export class Dashboard {
 
   statusTone(row: ProcessRow) {
     return STATUS_TONES[row.status];
+  }
+
+  /** Jumps to the list already filtered — the panel is a shortcut, not just a figure. */
+  openStatus(status: string): void {
+    void this.router.navigate(['/processes'], { queryParams: { status } });
   }
 
   onSortChange(next: SortState): void {

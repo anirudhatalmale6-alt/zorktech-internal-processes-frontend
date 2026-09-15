@@ -1,7 +1,7 @@
 <zt-page-header
   eyebrow="Internal processes"
   title="Dashboard"
-  description="Live view of process throughput and anything waiting on a decision."
+  description="Where the work sits right now, and anything waiting on a decision."
 >
   <button type="button" class="btn btn--secondary">
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -60,22 +60,89 @@
   }
 </section>
 
-<!-- ── Chart ────────────────────────────────────────────────────────────── -->
-<zt-card
-  title="Throughput"
-  subtitle="Processes started against processes completed, last 7 days"
-  class="dashboard__chart"
->
-  @if (chartLoading()) {
-    <div class="chart-skeleton" aria-hidden="true"></div>
-  } @else {
-    <zt-bar-chart [categories]="chartCategories()" [series]="chartSeries()" />
-  }
-</zt-card>
+<!-- ── Status panels ────────────────────────────────────────────────────── -->
+<div class="panels">
+  <zt-card title="By status" subtitle="Click a row to open the list filtered to it">
+    @if (breakdownLoading()) {
+      <div class="panel-skeleton" aria-hidden="true"></div>
+    } @else {
+      <ul class="breakdown">
+        @for (row of breakdownRows(); track row.status) {
+          <li>
+            <button type="button" class="breakdown__row" (click)="openStatus(row.status)">
+              <span class="breakdown__badge">
+                <zt-status-badge [label]="row.label" [tone]="row.tone" />
+              </span>
+
+              <span class="breakdown__meter" aria-hidden="true">
+                <span
+                  class="breakdown__fill"
+                  [class]="'breakdown__fill--' + row.tone"
+                  [style.width.%]="row.share"
+                ></span>
+              </span>
+
+              <span class="breakdown__count u-numeric">{{ row.count }}</span>
+              <span class="breakdown__share u-numeric">{{ row.share | number: '1.0-0' }}%</span>
+            </button>
+          </li>
+        }
+      </ul>
+
+      <p class="panel__total">
+        <span>Total</span>
+        <strong class="u-numeric">{{ breakdownTotal() }}</strong>
+      </p>
+    }
+  </zt-card>
+
+  <zt-card title="Workload by owner" subtitle="Active processes, busiest first">
+    @if (workloadLoading()) {
+      <div class="panel-skeleton" aria-hidden="true"></div>
+    } @else {
+      <table class="workload">
+        <thead>
+          <tr>
+            <th scope="col">Owner</th>
+            <th scope="col" class="workload__num">Active</th>
+            <th scope="col" class="workload__num">Blocked</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of workloadRows(); track row.owner) {
+            <tr>
+              <th scope="row" class="workload__owner">
+                <!-- Unassigned work is the thing this panel exists to surface,
+                     so it is labelled rather than rendered as a blank row. -->
+                {{ row.owner || 'Unassigned' }}
+              </th>
+              <td class="workload__num">
+                <span class="workload__bar" aria-hidden="true">
+                  <span
+                    class="workload__bar-fill"
+                    [style.width.%]="(row.active / workloadPeak()) * 100"
+                  ></span>
+                </span>
+                <span class="u-numeric">{{ row.active }}</span>
+              </td>
+              <td class="workload__num">
+                @if (row.blocked > 0) {
+                  <span class="workload__blocked u-numeric">{{ row.blocked }}</span>
+                } @else {
+                  <span class="workload__none">—</span>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </zt-card>
+</div>
 
 <!-- ── Recent processes ─────────────────────────────────────────────────── -->
 <zt-card title="Recently updated" subtitle="Click a row to open the process" [flush]="true">
-  <a ztCardAction class="btn btn--ghost btn--sm" href="#">View all</a>
+  <a ztCardAction class="btn btn--ghost btn--sm" routerLink="/processes">View all</a>
 
   <zt-data-table
     [columns]="columns"

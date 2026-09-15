@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  input,
+  signal,
+  untracked,
+} from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
@@ -78,7 +87,30 @@ export class ProcessesList {
 
   private readonly searchInput = new Subject<string>();
 
+  /**
+   * `?status=blocked` from the URL, bound by `withComponentInputBinding()`.
+   *
+   * This is what makes the dashboard's "By status" panel a working shortcut
+   * rather than a link that navigates and then appears to do nothing — the
+   * exact failure where the click "works", the URL changes, and the list
+   * ignores it.
+   *
+   * It also means a filtered list is a shareable URL, which is the first thing
+   * anyone asks for once they start sending each other links to work.
+   */
+  readonly statusParam = input<string>('', { alias: 'status' });
+
   constructor() {
+    effect(() => {
+      const incoming = this.statusParam() as ProcessQuery['status'];
+
+      // untracked: this effect reacts to the URL, not to its own writes.
+      // Reading query() tracked would re-run it on every filter change.
+      if (incoming !== untracked(this.query).status) {
+        this.query.update((current) => ({ ...current, status: incoming, page: 1 }));
+      }
+    });
+
     // Every query change triggers exactly one request. switchMap cancels the
     // in-flight one, which is what stops a slow page-2 response landing after
     // a fast page-3 response and painting the wrong page — a race that only

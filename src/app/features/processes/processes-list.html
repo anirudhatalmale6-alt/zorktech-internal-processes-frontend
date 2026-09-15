@@ -19,27 +19,27 @@
     (searchChange)="onSearch($event)"
     (clear)="clearFilters()"
   >
-    <select
-      class="select"
-      [value]="query().status"
-      (change)="onStatusChange($event)"
-      aria-label="Filter by status"
-    >
-      <option value="">All statuses</option>
+    <!--
+      Selection is driven by [selected] on each option, NOT by [value] on the
+      select. A [value] binding is applied before the @for has created the
+      options, so it matches nothing and silently falls back to the first entry:
+      arriving at ?status=blocked gave a correctly filtered list under a
+      dropdown reading "All statuses". A control that misreports its own state
+      is worse than one that does nothing, because people trust it.
+    -->
+    <select class="select" (change)="onStatusChange($event)" aria-label="Filter by status">
+      <option value="" [selected]="query().status === ''">All statuses</option>
       @for (option of statusOptions; track option.value) {
-        <option [value]="option.value">{{ option.label }}</option>
+        <option [value]="option.value" [selected]="query().status === option.value">
+          {{ option.label }}
+        </option>
       }
     </select>
 
-    <select
-      class="select"
-      [value]="query().owner"
-      (change)="onOwnerChange($event)"
-      aria-label="Filter by owner"
-    >
-      <option value="">All owners</option>
+    <select class="select" (change)="onOwnerChange($event)" aria-label="Filter by owner">
+      <option value="" [selected]="query().owner === ''">All owners</option>
       @for (owner of owners(); track owner) {
-        <option [value]="owner">{{ owner }}</option>
+        <option [value]="owner" [selected]="query().owner === owner">{{ owner }}</option>
       }
     </select>
   </zt-filter-bar>

@@ -2,7 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, delay, of } from 'rxjs';
 
 import { ApiService } from '../../core/http/api.service';
-import { DashboardSummary, ProcessRow, ThroughputPoint } from './dashboard.models';
+import {
+  DashboardSummary,
+  OwnerWorkload,
+  ProcessRow,
+  StatusBreakdownRow,
+} from './dashboard.models';
 
 /**
  * Dashboard data access.
@@ -37,17 +42,29 @@ export class DashboardService {
     }).pipe(delay(400));
   }
 
-  getThroughput(): Observable<ThroughputPoint[]> {
-    // return this.api.get<ThroughputPoint[]>('dashboard/throughput', { range: '30d' });
+  getStatusBreakdown(): Observable<StatusBreakdownRow[]> {
+    // return this.api.get<StatusBreakdownRow[]>('dashboard/by-status');
 
-    return of<ThroughputPoint[]>([
-      { label: 'Mon', started: 38, completed: 31 },
-      { label: 'Tue', started: 44, completed: 40 },
-      { label: 'Wed', started: 29, completed: 36 },
-      { label: 'Thu', started: 52, completed: 45 },
-      { label: 'Fri', started: 47, completed: 49 },
-      { label: 'Sat', started: 12, completed: 15 },
-      { label: 'Sun', started: 8, completed: 9 },
+    return of<StatusBreakdownRow[]>([
+      { status: 'running', count: 68 },
+      { status: 'review', count: 41 },
+      { status: 'blocked', count: 23 },
+      { status: 'completed', count: 15 },
+    ]).pipe(delay(450));
+  }
+
+  getOwnerWorkload(): Observable<OwnerWorkload[]> {
+    // return this.api.get<OwnerWorkload[]>('dashboard/workload');
+
+    return of<OwnerWorkload[]>([
+      { owner: 'Ana Duarte', active: 34, blocked: 6 },
+      { owner: 'Marco Feliu', active: 28, blocked: 9 },
+      { owner: 'Priya Raman', active: 26, blocked: 2 },
+      { owner: 'Sofia Klein', active: 19, blocked: 4 },
+      { owner: 'Tomas Berg', active: 17, blocked: 2 },
+      // Unassigned deliberately present: work with no owner is exactly what a
+      // workload panel exists to surface, and dropping it would hide it.
+      { owner: '', active: 8, blocked: 0 },
     ]).pipe(delay(500));
   }
 

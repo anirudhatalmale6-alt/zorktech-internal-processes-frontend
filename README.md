@@ -114,7 +114,7 @@ src/
     layout/          shell (grid + topbar), sidebar, viewport-gate, navigation
     shared/ui/       card, page-header, stat-tile, status-badge, progress-bar,
                      data-table, filter-bar, pagination, detail-list,
-                     empty-state, modal, bar-chart, toast-host
+                     empty-state, modal, toast-host
     shared/forms/    form-field, validation-messages
     features/        dashboard, processes (list + detail), auth/login, errors
 ```
@@ -139,12 +139,12 @@ renders whatever rows it is given. A table that sorts its own rows reorders
 only the page already downloaded while looking exactly like it sorted the whole
 result set.
 
-**Charts are hand-drawn SVG, for now.** Two simple chart types didn't justify
-60–200 KB of library plus its own opinions about colour to fight back into line
-with the brand guide. Bar axes start at zero — a truncated axis can make a 5%
-gap look like a doubling, which on a dashboard that drives decisions is not a
-styling choice. If the real requirements need zooming, brushing or live
-streaming, swapping in a library touches one component.
+**No charts, and no charting library.** The client confirmed twice that the
+system is tables, forms and status panels. The dashboard's figures are shown as
+KPI tiles, a by-status breakdown and a workload table rather than graphs. An
+earlier hand-rolled SVG bar chart was removed rather than left in place unused —
+dead code in a shared folder gets copied by whoever arrives next. It is in git
+history if a chart is ever genuinely wanted.
 
 **`zt-stat-tile` takes `higherIsBetter`.** Set it `false` for metrics where a
 rise is bad news — overdue tasks, cycle time, rejections. The arrow follows the
