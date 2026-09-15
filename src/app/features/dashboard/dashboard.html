@@ -92,19 +92,7 @@
     </ng-template>
 
     <ng-template ztCell="progress" let-row>
-      <div class="progress" [attr.title]="row.progress + '% complete'">
-        <div
-          class="progress__bar"
-          role="progressbar"
-          [attr.aria-valuenow]="row.progress"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          [attr.aria-label]="'Progress for ' + row.reference"
-        >
-          <span class="progress__fill" [style.width.%]="row.progress"></span>
-        </div>
-        <span class="progress__value u-numeric">{{ row.progress }}%</span>
-      </div>
+      <zt-progress-bar [value]="row.progress" [label]="'Progress for ' + row.reference" />
     </ng-template>
 
     <ng-template ztCell="updatedAt" let-row>

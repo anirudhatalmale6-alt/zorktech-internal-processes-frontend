@@ -1,0 +1,79 @@
+<zt-page-header
+  eyebrow="Internal processes"
+  title="Processes"
+  description="Every process in the system. Filter by status or owner to narrow the list."
+>
+  <button type="button" class="btn btn--primary">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+    </svg>
+    New process
+  </button>
+</zt-page-header>
+
+<zt-card [flush]="true">
+  <zt-filter-bar
+    [searchValue]="searchText()"
+    searchPlaceholder="Search reference, name or owner"
+    [activeCount]="activeFilters()"
+    (searchChange)="onSearch($event)"
+    (clear)="clearFilters()"
+  >
+    <select
+      class="select"
+      [value]="query().status"
+      (change)="onStatusChange($event)"
+      aria-label="Filter by status"
+    >
+      <option value="">All statuses</option>
+      @for (option of statusOptions; track option.value) {
+        <option [value]="option.value">{{ option.label }}</option>
+      }
+    </select>
+
+    <select
+      class="select"
+      [value]="query().owner"
+      (change)="onOwnerChange($event)"
+      aria-label="Filter by owner"
+    >
+      <option value="">All owners</option>
+      @for (owner of owners(); track owner) {
+        <option [value]="owner">{{ owner }}</option>
+      }
+    </select>
+  </zt-filter-bar>
+
+  <zt-data-table
+    [columns]="columns"
+    [rows]="rows()"
+    [loading]="loading()"
+    [sort]="sort()"
+    [filtered]="activeFilters() > 0"
+    emptyTitle="No processes match those filters"
+    emptyDescription="Try widening the search, or clear the filters to see everything."
+    (sortChange)="onSortChange($event)"
+    (rowClick)="openProcess($event)"
+  >
+    <ng-template ztCell="status" let-row>
+      <zt-status-badge [label]="statusLabel(row)" [tone]="statusTone(row)" />
+    </ng-template>
+
+    <ng-template ztCell="progress" let-row>
+      <zt-progress-bar [value]="row.progress" [label]="'Progress for ' + row.reference" />
+    </ng-template>
+
+    <ng-template ztCell="updatedAt" let-row>
+      <span class="u-numeric">{{ row.updatedAt | date: 'dd MMM, HH:mm' }}</span>
+    </ng-template>
+  </zt-data-table>
+
+  <div ztCardFooter>
+    <zt-pagination
+      [page]="query().page"
+      [pageSize]="query().pageSize"
+      [total]="total()"
+      (pageChange)="onPageChange($event)"
+    />
+  </div>
+</zt-card>

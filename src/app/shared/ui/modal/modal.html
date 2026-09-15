@@ -1,0 +1,46 @@
+<dialog
+  #dialog
+  class="modal"
+  [class]="'modal--' + size()"
+  [attr.aria-labelledby]="'modal-title'"
+  [attr.aria-describedby]="description() ? 'modal-description' : null"
+  (close)="onDialogClose()"
+  (click)="onBackdropClick($event)"
+>
+  <!--
+    Content is only instantiated while open. Without this the body of every
+    modal on a screen is built, and its children's constructors run, on first
+    render — which for a modal containing a form means firing its data loads
+    before anyone has opened it.
+  -->
+  @if (open()) {
+    <div class="modal__panel">
+      <header class="modal__header">
+        <div class="modal__heading">
+          <h2 class="modal__title" id="modal-title">{{ title() }}</h2>
+
+          @if (description()) {
+            <p class="modal__description" id="modal-description">{{ description() }}</p>
+          }
+        </div>
+
+        <button type="button" class="modal__close" (click)="close()" aria-label="Close dialog">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              fill="currentColor"
+              d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4z"
+            />
+          </svg>
+        </button>
+      </header>
+
+      <div class="modal__body">
+        <ng-content />
+      </div>
+
+      <footer class="modal__footer">
+        <ng-content select="[ztModalFooter]" />
+      </footer>
+    </div>
+  }
+</dialog>

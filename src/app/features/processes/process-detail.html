@@ -1,0 +1,110 @@
+@if (loading()) {
+  <div class="detail-skeleton" aria-label="Loading process" aria-busy="true"></div>
+} @else if (notFound()) {
+  <zt-page-header title="Process not found" description="That process no longer exists, or you don't have access to it.">
+    <a class="btn btn--primary" routerLink="/processes">Back to processes</a>
+  </zt-page-header>
+} @else if (process(); as row) {
+  <zt-page-header [eyebrow]="row.reference" [title]="row.name">
+    <a class="btn btn--secondary" routerLink="/processes">Back to list</a>
+  </zt-page-header>
+
+  <div class="detail">
+    <!-- ── Status panel ───────────────────────────────────────────────── -->
+    <div class="detail__main">
+      <zt-card title="Summary">
+        <zt-status-badge ztCardAction [label]="statusLabel()" [tone]="statusTone()" />
+
+        <zt-detail-list [items]="details()" [columns]="2" />
+
+        <div class="detail__progress">
+          <p class="detail__progress-label">Completion</p>
+          <zt-progress-bar [value]="row.progress" [label]="'Progress for ' + row.reference" />
+        </div>
+      </zt-card>
+
+      <!-- ── Action form ──────────────────────────────────────────────── -->
+      <zt-card
+        title="Advance to next stage"
+        subtitle="Add a note explaining the decision. It is recorded against the process."
+        class="detail__form-card"
+      >
+        <form [formGroup]="form" (ngSubmit)="openConfirm()" novalidate>
+          <zt-form-field
+            label="Decision note"
+            controlId="note"
+            [control]="note"
+            hint="At least 10 characters. Visible to everyone with access to this process."
+          >
+            <textarea
+              id="note"
+              class="textarea"
+              rows="4"
+              formControlName="note"
+              [attr.aria-invalid]="note.touched && note.invalid"
+              [attr.aria-describedby]="note.touched && note.invalid ? 'note-error' : 'note-hint'"
+            ></textarea>
+          </zt-form-field>
+
+          <label class="checkbox">
+            <input type="checkbox" formControlName="notify" />
+            <span>Notify the process owner by email</span>
+          </label>
+
+          <div class="detail__actions">
+            <button type="button" class="btn btn--secondary">Save draft</button>
+            <button type="submit" class="btn btn--primary">Advance stage</button>
+          </div>
+        </form>
+      </zt-card>
+    </div>
+
+    <!-- ── Side panel ─────────────────────────────────────────────────── -->
+    <aside class="detail__side">
+      <zt-card title="Activity">
+        <ol class="timeline">
+          <li class="timeline__item">
+            <span class="timeline__dot timeline__dot--current" aria-hidden="true"></span>
+            <div>
+              <p class="timeline__title">{{ row.stage }}</p>
+              <p class="timeline__meta">Current stage</p>
+            </div>
+          </li>
+          <li class="timeline__item">
+            <span class="timeline__dot" aria-hidden="true"></span>
+            <div>
+              <p class="timeline__title">Process created</p>
+              <p class="timeline__meta">{{ row.owner || 'Unassigned' }}</p>
+            </div>
+          </li>
+        </ol>
+
+        <p class="detail__placeholder-note">
+          Placeholder — the real activity trail comes from the process history endpoint.
+        </p>
+      </zt-card>
+    </aside>
+  </div>
+
+  <!-- ── Confirmation modal ───────────────────────────────────────────── -->
+  <zt-modal
+    [open]="confirmOpen()"
+    size="sm"
+    title="Advance this process?"
+    [description]="row.reference + ' will move out of ' + row.stage + '.'"
+    (closed)="confirmOpen.set(false)"
+  >
+    <p class="modal-body-text">
+      This is recorded against the process and the owner will be able to see your note.
+    </p>
+
+    <div ztModalFooter>
+      <button type="button" class="btn btn--secondary" (click)="confirmOpen.set(false)">
+        Cancel
+      </button>
+      <button type="button" class="btn btn--primary" [disabled]="submitting()" (click)="advance()">
+        {{ submitting() ? 'Working…' : 'Yes, advance' }}
+      </button>
+    </div>
+  </zt-modal>
+}

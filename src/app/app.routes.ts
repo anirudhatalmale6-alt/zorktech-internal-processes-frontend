@@ -29,6 +29,19 @@ export const routes: Routes = [
           import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
+        path: 'processes',
+        title: 'Processes · Zorktech',
+        loadComponent: () =>
+          import('./features/processes/processes-list').then((m) => m.ProcessesList),
+      },
+      {
+        // `:id` binds to the component's `id` input via withComponentInputBinding().
+        path: 'processes/:id',
+        title: 'Process · Zorktech',
+        loadComponent: () =>
+          import('./features/processes/process-detail').then((m) => m.ProcessDetail),
+      },
+      {
         path: 'forbidden',
         title: 'No access · Zorktech',
         loadComponent: () => import('./features/errors/forbidden').then((m) => m.Forbidden),

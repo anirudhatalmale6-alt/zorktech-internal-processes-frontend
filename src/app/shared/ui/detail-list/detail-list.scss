@@ -1,0 +1,55 @@
+@use '../../../../styles/typography' as type;
+
+:host {
+  display: block;
+  // Establishes the containment context the @container rule at the bottom
+  // queries. Without it that rule never matches and the panel stays two-up in
+  // a narrow sidebar — the failure is silent, which is what makes it easy to
+  // ship. Sizes to the panel it sits in, not the viewport, which is the point:
+  // the same panel is narrow in a side column and wide on a full-width screen.
+  container-type: inline-size;
+}
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(var(--details-columns, 2), minmax(0, 1fr));
+  gap: var(--space-5) var(--space-6);
+  margin: 0;
+}
+
+.details__item {
+  min-width: 0;
+}
+
+.details__item--wide {
+  grid-column: 1 / -1;
+}
+
+.details__label {
+  @include type.eyebrow;
+
+  margin-bottom: var(--space-1);
+}
+
+.details__value {
+  @include type.body;
+
+  margin: 0;
+  // Long values wrap rather than widening the grid column. `anywhere` so an
+  // unbroken reference or URL breaks too, instead of forcing a scrollbar.
+  overflow-wrap: anywhere;
+}
+
+.details__value--mono {
+  @include type.code;
+
+  font-size: var(--font-size-sm);
+}
+
+// One column below a narrow container: two columns of label/value at 300px
+// each leaves no room for the value and everything wraps mid-word.
+@container (max-width: 34rem) {
+  .details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

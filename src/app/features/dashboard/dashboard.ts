@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 
 import { BarChart, BarSeries } from '../../shared/ui/bar-chart/bar-chart';
@@ -7,6 +8,7 @@ import { Card } from '../../shared/ui/card/card';
 import { CellTemplate, SortState, TableColumn } from '../../shared/ui/data-table/data-table.models';
 import { DataTable } from '../../shared/ui/data-table/data-table';
 import { PageHeader } from '../../shared/ui/page-header/page-header';
+import { ProgressBar } from '../../shared/ui/progress-bar/progress-bar';
 import { StatTile } from '../../shared/ui/stat-tile/stat-tile';
 import { StatusBadge } from '../../shared/ui/status-badge/status-badge';
 import { DashboardService } from './dashboard.service';
@@ -28,6 +30,7 @@ import {
     DataTable,
     DatePipe,
     PageHeader,
+    ProgressBar,
     StatTile,
     StatusBadge,
   ],
@@ -36,6 +39,7 @@ import {
 })
 export class Dashboard {
   private readonly service = inject(DashboardService);
+  private readonly router = inject(Router);
 
   readonly summary = signal<DashboardSummary | null>(null);
   readonly throughput = signal<readonly ThroughputPoint[]>([]);
@@ -137,7 +141,6 @@ export class Dashboard {
   }
 
   onRowClick(row: ProcessRow): void {
-    // Navigates to /processes/:id once that screen exists.
-    console.info('[dashboard] row selected', row.reference);
+    void this.router.navigate(['/processes', row.id]);
   }
 }

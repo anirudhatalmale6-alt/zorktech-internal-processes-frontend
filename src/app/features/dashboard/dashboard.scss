@@ -29,37 +29,3 @@
   background: var(--surface-sunken);
   border-radius: var(--radius-md);
 }
-
-// ── Progress cell ────────────────────────────────────────────────────────────
-
-.progress {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  width: 100%;
-}
-
-.progress__bar {
-  flex: 1;
-  height: 0.375rem;
-  min-width: 2.5rem;
-  background: var(--neutral-200);
-  border-radius: var(--radius-full);
-  overflow: hidden;
-}
-
-.progress__fill {
-  display: block;
-  height: 100%;
-  background: var(--brand-primary);
-  border-radius: inherit;
-  transition: width var(--duration-normal) var(--easing-standard);
-}
-
-.progress__value {
-  flex-shrink: 0;
-  min-width: 2.5rem;
-  text-align: right;
-  font-size: var(--font-size-xs);
-  color: var(--text-secondary);
-}

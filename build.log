@@ -1,0 +1,27 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names          |  Raw size | Estimated transfer size
+chunk-Bcm9vRqk.js   | -              | 291.33 kB |                79.97 kB
+main-47HE6UMO.js    | main           |  14.89 kB |                 4.85 kB
+styles-3GSJSKU7.css | styles         |   9.37 kB |                 2.42 kB
+
+                    | Initial total  | 315.59 kB |                87.24 kB
+
+Lazy chunk files    | Names          |  Raw size | Estimated transfer size
+chunk-CCzGYfWG.js   | -              |  39.95 kB |                 8.85 kB
+chunk-Cjyv4z6M.js   | shell          |  22.94 kB |                 4.65 kB
+chunk-BnhrGMjl.js   | process-detail |  22.56 kB |                 6.37 kB
+chunk-DLJVP5uw.js   | dashboard      |  20.21 kB |                 6.04 kB
+chunk-CzEmgqAl.js   | processes-list |  12.93 kB |                 3.80 kB
+chunk-ndjySyPj.js   | -              |  10.60 kB |                 3.29 kB
+chunk-ChQTEz7S.js   | -              |   7.72 kB |                 1.91 kB
+chunk-yJp8_4_K.js   | login          |   5.71 kB |                 1.84 kB
+chunk-ZtMx1wWF.js   | -              |   2.05 kB |                 1.03 kB
+chunk-DEH216aA.js   | -              |   1.72 kB |               661 bytes
+chunk-qZKnHZdJ.js   | forbidden      | 512 bytes |               512 bytes
+chunk-L7v1GJkg.js   | not-found      | 483 bytes |               483 bytes
+
+Application bundle generation complete. [3.395 seconds] - 2026-09-15T23:43:55.894Z
+
+Output location: /mnt/freelancer-projects/40713859/zorktech-frontend/dist/zorktech-frontend
+

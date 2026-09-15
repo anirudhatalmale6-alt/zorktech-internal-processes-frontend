@@ -112,9 +112,11 @@ src/
   app/
     core/            config (runtime), http (api + errors), auth, notifications
     layout/          shell (grid + topbar), sidebar, viewport-gate, navigation
-    shared/ui/       card, page-header, stat-tile, status-badge,
-                     data-table, empty-state, bar-chart, toast-host
-    features/        dashboard, auth/login, errors
+    shared/ui/       card, page-header, stat-tile, status-badge, progress-bar,
+                     data-table, filter-bar, pagination, detail-list,
+                     empty-state, modal, bar-chart, toast-host
+    shared/forms/    form-field, validation-messages
+    features/        dashboard, processes (list + detail), auth/login, errors
 ```
 
 Feature routes are lazy-loaded from the start. An internal tool grows a long
@@ -159,6 +161,41 @@ server-side.
 chrome legitimately carries more CSS than that.
 
 ---
+
+## Tables, forms and status panels
+
+Confirmed with the client that the system is mostly tables, forms and status
+panels rather than charts, so that is where the component work went.
+
+**`zt-data-table` + `zt-filter-bar` + `zt-pagination`** work as a set, and all
+three are driven by a single `ProcessQuery` object. That object is the whole
+state of the list — search, filters, page, page size, sort — which means it can
+be written to the URL, restored on reload, and diffed to decide whether a
+request is needed at all. The list component holds it in one signal and every
+change flows through `switchMap`, so an in-flight request is cancelled rather
+than allowed to land late and paint the wrong page.
+
+Filtering and sorting always return to page 1. Staying on page 4 after changing
+a filter shows the fourth page of a different result set, which reads as the
+filter having done nothing.
+
+**`zt-modal`** wraps the native `<dialog>` element. `showModal()` gives focus
+trapping, Escape-to-close and inert background content correctly and for free —
+all three are things hand-rolled overlays usually get wrong. Backdrop dismissal
+is off by default: a half-filled form that vanishes on a stray click is the
+worst thing a modal can do.
+
+**`zt-form-field` + `validation-messages.ts`** own all validation wording in one
+place, and wire `for`/`id`, `aria-describedby` and `aria-invalid` together so
+the visible state and the announced state cannot disagree.
+
+> Implementation note worth keeping: reactive forms are *not* signal-based.
+> `control.touched` and `control.errors` are plain properties, so a `computed()`
+> reading them depends on nothing and never recomputes — the error text renders
+> once and then freezes, and `markAllAsTouched()` on submit displays nothing at
+> all. `FormField` subscribes to `control.events` and bumps a revision signal to
+> give the computed something that actually changes. Any new signal-based code
+> reading a reactive form control needs the same treatment.
 
 ## Still to come
 

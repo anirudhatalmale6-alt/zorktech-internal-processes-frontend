@@ -1,0 +1,105 @@
+❯ Building...
+✔ Building...
+Initial chunk files | Names          |  Raw size
+main.js             | main           |  27.87 kB | 
+styles.css          | styles         |  10.85 kB | 
+chunk-I5YMWN5O.js   | -              |   4.20 kB | 
+chunk-OSHTTWJY.js   | -              |   3.71 kB | 
+chunk-JCWCQEU6.js   | -              |   3.02 kB | 
+chunk-ER4R7JLR.js   | -              |   1.91 kB | 
+chunk-VUJOFXKG.js   | -              | 987 bytes | 
+
+                    | Initial total  |  52.54 kB
+
+Lazy chunk files    | Names          |  Raw size
+chunk-O5RTJ2YH.js   | process-detail |  67.43 kB | 
+chunk-665TNSSW.js   | dashboard      |  59.18 kB | 
+chunk-7ANZKGK7.js   | shell          |  55.38 kB | 
+chunk-2UJOYW6I.js   | processes-list |  40.14 kB | 
+chunk-74QR7T5A.js   | -              |  33.39 kB | 
+chunk-ABJFVPO5.js   | -              |  27.64 kB | 
+chunk-TKT4V77E.js   | login          |  16.01 kB | 
+chunk-VMWWWVWA.js   | -              |   6.18 kB | 
+chunk-QDGBCENE.js   | -              |   4.20 kB | 
+chunk-4MNHCHN2.js   | forbidden      |   2.39 kB | 
+chunk-5C6GNJC6.js   | not-found      |   2.32 kB | 
+
+Application bundle generation complete. [2.461 seconds] - 2026-09-15T23:42:01.804Z
+
+Watch mode enabled. Watching for file changes...
+NOTE: Raw file sizes do not reflect development server per-request transformations.
+  ➜  Local:   http://localhost:4290/
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Application bundle generation failed. [0.782 seconds] - 2026-09-15T23:43:02.719Z
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'signal'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/forms/form-field/form-field.ts:90:30:
+[37m      90 │   private readonly revision = [32msignal[37m(0);
+         ╵                               [32m~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS2304: Cannot find name 'effect'.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/forms/form-field/form-field.ts:93:4:
+[37m      93 │     [32meffect[37m((onCleanup) => {
+         ╵     [32m~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'onCleanup' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/forms/form-field/form-field.ts:93:12:
+[37m      93 │     effect(([32monCleanup[37m) => {
+         ╵             [32m~~~~~~~~~[0m
+
+
+[31m✘ [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'value' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/shared/forms/form-field/form-field.ts:101:30:
+[37m      101 │         this.revision.update(([32mvalue[37m) => value + 1),
+          ╵                               [32m~~~~~[0m
+
+
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names          |  Raw size
+main.js             | main           |  27.87 kB | 
+styles.css          | styles         |  10.85 kB | 
+chunk-I5YMWN5O.js   | -              |   4.20 kB | 
+chunk-OSHTTWJY.js   | -              |   3.71 kB | 
+chunk-JCWCQEU6.js   | -              |   3.02 kB | 
+chunk-ER4R7JLR.js   | -              |   1.91 kB | 
+chunk-VUJOFXKG.js   | -              | 987 bytes | 
+
+                    | Initial total  |  52.54 kB
+
+Lazy chunk files    | Names          |  Raw size
+chunk-A5LEKMPZ.js   | process-detail |  68.50 kB | 
+chunk-665TNSSW.js   | dashboard      |  59.18 kB | 
+chunk-7ANZKGK7.js   | shell          |  55.38 kB | 
+chunk-2UJOYW6I.js   | processes-list |  40.14 kB | 
+chunk-74QR7T5A.js   | -              |  33.39 kB | 
+chunk-ABJFVPO5.js   | -              |  27.64 kB | 
+chunk-TKT4V77E.js   | login          |  16.01 kB | 
+chunk-VMWWWVWA.js   | -              |   6.18 kB | 
+chunk-QDGBCENE.js   | -              |   4.20 kB | 
+chunk-4MNHCHN2.js   | forbidden      |   2.39 kB | 
+chunk-5C6GNJC6.js   | not-found      |   2.32 kB | 
+
+Application bundle generation complete. [0.179 seconds] - 2026-09-15T23:43:06.249Z
+
+Page reload sent to client(s).
+❯ Changes detected. Rebuilding...
+✔ Changes detected. Rebuilding...
+Initial chunk files | Names          | Raw size
+main.js             | main           | 27.87 kB | 
+
+Lazy chunk files    | Names          | Raw size
+chunk-BLLTNSRZ.js   | process-detail | 68.50 kB | 
+chunk-6HKA3ZLN.js   | processes-list | 40.14 kB | 
+chunk-7I5H6UAF.js   | -              |  4.19 kB | 
+
+Application bundle generation complete. [0.298 seconds] - 2026-09-15T23:43:40.790Z
+
+Page reload sent to client(s).

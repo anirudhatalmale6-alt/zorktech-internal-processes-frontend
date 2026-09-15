@@ -1,0 +1,73 @@
+@use '../../../../styles/typography' as type;
+
+:host {
+  display: block;
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.filters__search {
+  position: relative;
+  flex: 1 1 16rem;
+  min-width: 12rem;
+  max-width: 24rem;
+}
+
+.filters__search-icon {
+  position: absolute;
+  top: 50%;
+  left: var(--space-3);
+  width: 1.125rem;
+  height: 1.125rem;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.filters__search-input {
+  padding-left: var(--space-8);
+
+  // Chrome draws its own clear "x" on type=search, which collides with the
+  // field's own padding and looks like a rendering fault next to our icon.
+  &::-webkit-search-cancel-button {
+    appearance: none;
+  }
+}
+
+.filters__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+
+  // Projected selects size to their content rather than stretching, so a
+  // "Status" dropdown doesn't end up as wide as the search box.
+  ::ng-deep .select {
+    width: auto;
+    min-width: 9rem;
+  }
+}
+
+.filters__active {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-left: auto;
+}
+
+.filters__count {
+  @include type.caption;
+
+  padding: var(--space-1) var(--space-2);
+  color: var(--status-info);
+  background: var(--status-info-subtle);
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-medium);
+}
