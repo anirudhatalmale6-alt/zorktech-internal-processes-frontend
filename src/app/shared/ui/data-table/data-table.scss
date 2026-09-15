@@ -1,0 +1,153 @@
+@use '../../../../styles/typography' as type;
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+// Horizontal scroll lives here, on a bounded container. Without it a wide
+// table stretches its parent and the whole page scrolls sideways, which on an
+// internal tool means the sidebar slides off screen.
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table {
+  display: grid;
+  width: 100%;
+  // min-width:100%, NOT max-content. With max-content, a single long value in
+  // any row widens the whole grid to fit it and pushes the right-hand columns
+  // off screen — so the table scrolls sideways because of one supplier name.
+  // At 100% the columns hold their declared minmax() floors, long text
+  // ellipsises, and horizontal scroll appears only when those floors genuinely
+  // exceed the container.
+  min-width: 100%;
+}
+
+.table__head,
+.table__body,
+.table__row {
+  display: contents; // children participate in the outer grid
+}
+
+.table__cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+
+  @include type.table-cell;
+}
+
+.table__cell--right {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.table__cell--center {
+  justify-content: center;
+  text-align: center;
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+
+.table__cell--head {
+  @include type.table-header;
+
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  gap: var(--space-1);
+  background: var(--surface-sunken);
+  border-bottom: 1px solid var(--border-default);
+  user-select: none;
+}
+
+.table__cell--sortable {
+  cursor: pointer;
+
+  &:hover {
+    color: var(--text-primary);
+  }
+}
+
+.table__head-label {
+  @include type.truncate;
+}
+
+.table__sort {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  opacity: 0.35;
+  transition:
+    opacity var(--duration-fast) var(--easing-standard),
+    transform var(--duration-fast) var(--easing-standard);
+}
+
+.table__sort--active {
+  opacity: 1;
+  color: var(--brand-primary);
+}
+
+.table__sort--desc {
+  transform: rotate(180deg);
+}
+
+// ── Rows ─────────────────────────────────────────────────────────────────────
+
+// :hover on a display:contents row does nothing, so the highlight is driven
+// from the cells via the row's hover state using :has — supported in every
+// browser this tool targets.
+.table__row--clickable {
+  cursor: pointer;
+}
+
+.table__row--clickable:hover .table__cell {
+  background: var(--surface-hover);
+}
+
+.table__row--clickable:focus-visible .table__cell {
+  background: var(--surface-selected);
+  outline: none;
+}
+
+.table__row--clickable:focus-visible .table__cell:first-child {
+  box-shadow: inset 2px 0 0 var(--border-focus);
+}
+
+// ── Loading skeleton ─────────────────────────────────────────────────────────
+
+.skeleton {
+  display: block;
+  width: 100%;
+  max-width: 8rem;
+  height: 0.75rem;
+  background: linear-gradient(
+    90deg,
+    var(--neutral-100) 25%,
+    var(--neutral-200) 37%,
+    var(--neutral-100) 63%
+  );
+  background-size: 400% 100%;
+  border-radius: var(--radius-xs);
+  animation: skeleton-sweep 1.4s ease infinite;
+}
+
+@keyframes skeleton-sweep {
+  from {
+    background-position: 100% 50%;
+  }
+
+  to {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

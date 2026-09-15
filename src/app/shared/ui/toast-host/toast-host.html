@@ -1,0 +1,49 @@
+<!--
+  aria-live="polite" so a screen reader announces new toasts without
+  interrupting whatever the user is doing. role="status" on each item keeps
+  errors from being announced twice.
+-->
+<div class="toasts" aria-live="polite" aria-atomic="false">
+  @for (toast of toasts(); track toast.id) {
+    <div class="toast" [class]="'toast--' + toast.kind" role="status">
+      <svg class="toast__icon" viewBox="0 0 24 24" aria-hidden="true">
+        @switch (toast.kind) {
+          @case ('success') {
+            <path fill="currentColor" d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z" />
+          }
+          @case ('error') {
+            <path
+              fill="currentColor"
+              d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+            />
+          }
+          @case ('warning') {
+            <path fill="currentColor" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          }
+          @default {
+            <path
+              fill="currentColor"
+              d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"
+            />
+          }
+        }
+      </svg>
+
+      <p class="toast__message">{{ toast.message }}</p>
+
+      <button
+        type="button"
+        class="toast__close"
+        (click)="dismiss(toast.id)"
+        aria-label="Dismiss notification"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            fill="currentColor"
+            d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12 19 6.4z"
+          />
+        </svg>
+      </button>
+    </div>
+  }
+</div>

@@ -1,0 +1,159 @@
+@use '../../../styles/tokens' as tokens;
+@use '../../../styles/typography' as type;
+
+:host {
+  display: block;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: var(--shell-sidebar-width) minmax(0, 1fr);
+  min-height: 100dvh;
+  transition: grid-template-columns var(--duration-normal) var(--easing-standard);
+}
+
+.shell--collapsed {
+  grid-template-columns: var(--shell-sidebar-width-collapsed) minmax(0, 1fr);
+}
+
+// ── Topbar ───────────────────────────────────────────────────────────────────
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  height: var(--shell-topbar-height);
+  padding-inline: var(--space-6);
+  background: var(--surface-card);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.topbar__left,
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.env-chip {
+  @include type.eyebrow;
+
+  padding: var(--space-1) var(--space-2);
+  color: var(--status-warning);
+  background: var(--status-warning-subtle);
+  border-radius: var(--radius-sm);
+}
+
+// ── User menu ────────────────────────────────────────────────────────────────
+
+.user-menu {
+  position: relative;
+}
+
+.user-menu__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+
+  &:hover {
+    background: var(--surface-hover);
+  }
+}
+
+.user-menu__avatar {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--brand-on-primary);
+  background: var(--brand-primary);
+  border-radius: var(--radius-full);
+}
+
+.user-menu__name {
+  @include type.truncate;
+
+  max-width: 12rem;
+  font-weight: var(--font-weight-medium);
+}
+
+.user-menu__caret {
+  width: 1.125rem;
+  height: 1.125rem;
+  color: var(--text-muted);
+}
+
+.user-menu__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-dropdown);
+}
+
+.user-menu__panel {
+  position: absolute;
+  top: calc(100% + var(--space-2));
+  right: 0;
+  z-index: calc(var(--z-dropdown) + 1);
+  min-width: 11rem;
+  padding: var(--space-1);
+  background: var(--surface-raised);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+.user-menu__item {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  font-size: var(--font-size-base);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+
+  &:hover {
+    background: var(--surface-hover);
+  }
+}
+
+// ── Content ──────────────────────────────────────────────────────────────────
+
+.shell__main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; // lets wide tables scroll instead of stretching the grid column
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: var(--shell-content-max-width);
+  padding: var(--space-6);
+
+  &:focus {
+    outline: none; // focused only programmatically, via the skip link
+  }
+}
+
+// Tablet: tighter padding, and the rail sits at collapsed width so content
+// keeps a usable measure on a 1024px landscape screen. The rail's own styles
+// handle switching its contents to icons — see sidebar.scss.
+@media (max-width: tokens.$breakpoint-tablet) {
+  .shell {
+    grid-template-columns: var(--shell-sidebar-width-collapsed) minmax(0, 1fr);
+  }
+
+  .content {
+    padding: var(--space-4);
+  }
+}

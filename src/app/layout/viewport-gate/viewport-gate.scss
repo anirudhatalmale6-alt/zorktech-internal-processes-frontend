@@ -1,0 +1,48 @@
+@use '../../../styles/typography' as type;
+
+.gate {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-gate);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  background: var(--surface-app);
+}
+
+.gate__panel {
+  max-width: 26rem;
+  padding: var(--space-8);
+  text-align: center;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.gate__icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 auto var(--space-5);
+  color: var(--text-muted);
+}
+
+.gate__title {
+  @include type.section-title;
+
+  margin-bottom: var(--space-3);
+}
+
+.gate__body {
+  @include type.body-secondary;
+
+  margin-bottom: var(--space-5);
+}
+
+.gate__detail {
+  @include type.caption;
+
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-subtle);
+}

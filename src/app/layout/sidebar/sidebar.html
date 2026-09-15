@@ -1,0 +1,52 @@
+<div class="sidebar__brand">
+  <!--
+    PLACEHOLDER MARK — replace with the Zorktech logo SVG from the brand guide.
+    Sized to the collapsed rail so the swap needs no layout change.
+  -->
+  <span class="sidebar__logo" aria-hidden="true">Z</span>
+  <span class="sidebar__wordmark">Zorktech</span>
+</div>
+
+<nav class="sidebar__nav" aria-label="Main navigation">
+  @for (section of sections(); track section.title) {
+    <div class="nav-section">
+      <p class="nav-section__title">{{ section.title }}</p>
+
+      <ul>
+        @for (item of section.items; track item.route) {
+          <li>
+            <a
+              class="nav-item"
+              [routerLink]="item.route"
+              routerLinkActive="nav-item--active"
+              [routerLinkActiveOptions]="{ exact: false }"
+              [attr.title]="collapsed() ? item.label : null"
+            >
+              <svg class="nav-item__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" [attr.d]="item.icon" />
+              </svg>
+              <span class="nav-item__label">{{ item.label }}</span>
+
+              @if (item.badge) {
+                <span class="nav-item__badge u-numeric">{{ item.badge }}</span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+</nav>
+
+<button
+  type="button"
+  class="sidebar__toggle"
+  (click)="toggle.emit()"
+  [attr.aria-label]="collapsed() ? 'Expand navigation' : 'Collapse navigation'"
+  [attr.aria-expanded]="!collapsed()"
+>
+  <svg class="sidebar__toggle-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="currentColor" d="M15.4 7.4 14 6l-6 6 6 6 1.4-1.4-4.6-4.6 4.6-4.6z" />
+  </svg>
+  <span class="sidebar__toggle-label">Collapse</span>
+</button>

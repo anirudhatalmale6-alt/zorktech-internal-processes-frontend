@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Zorktech — Internal Processes</title>
+  <base href="/">
+
+  <!--
+    No maximum-scale / user-scalable=no. Pinch-zoom is how people with low
+    vision read a dense table, and disabling it is the most common
+    accessibility mistake in an admin UI. The viewport gate handles the
+    "too narrow" case properly, by explaining it.
+  -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Zorktech internal processes system.">
+
+  <!-- Internal tool: keep it out of search indexes entirely. -->
+  <meta name="robots" content="noindex, nofollow">
+
+  <meta name="theme-color" content="#2f4a6d">
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!--
+    PLACEHOLDER FONT — Inter, pending the brand guide's typeface.
+
+    preconnect before the stylesheet so the TLS handshake to the font host
+    overlaps with the CSS download instead of queueing behind it. If the guide
+    specifies a licensed face, these tags are replaced by local @font-face
+    declarations pointing at self-hosted .woff2 files, which is faster and
+    avoids a third-party request from an internal tool altogether.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+</head>
+<body>
+  <app-root></app-root>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<div class="login">
+  <div class="login__panel">
+    <div class="login__brand">
+      <!-- PLACEHOLDER MARK — swap for the Zorktech logo SVG. -->
+      <span class="login__logo" aria-hidden="true">Z</span>
+      <span class="login__wordmark">Zorktech</span>
+    </div>
+
+    <h1 class="login__title">Sign in</h1>
+    <p class="login__subtitle">Internal processes system</p>
+
+    <form class="login__form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      @if (errorMessage(); as message) {
+        <!-- role="alert" so it is announced the moment it appears; a silent
+             error message is invisible to anyone using a screen reader. -->
+        <p class="login__error" role="alert">{{ message }}</p>
+      }
+
+      <div class="field">
+        <label class="field__label" for="username">Username</label>
+        <input
+          id="username"
+          class="input"
+          type="text"
+          formControlName="username"
+          autocomplete="username"
+          autocapitalize="none"
+          spellcheck="false"
+          [attr.aria-invalid]="username.touched && username.invalid"
+          [attr.aria-describedby]="username.touched && username.invalid ? 'username-error' : null"
+        />
+        @if (username.touched && username.hasError('required')) {
+          <p class="field__error" id="username-error">Enter your username.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="password">Password</label>
+        <input
+          id="password"
+          class="input"
+          type="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [attr.aria-invalid]="password.touched && password.invalid"
+          [attr.aria-describedby]="password.touched && password.invalid ? 'password-error' : null"
+        />
+        @if (password.touched && password.hasError('required')) {
+          <p class="field__error" id="password-error">Enter your password.</p>
+        }
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--lg btn--block" [disabled]="submitting()">
+        {{ submitting() ? 'Signing in…' : 'Sign in' }}
+      </button>
+    </form>
+
+    <p class="login__env">{{ environmentLabel }}</p>
+  </div>
+</div>

@@ -1,0 +1,194 @@
+// =============================================================================
+// BRAND TOKENS — the single file to edit when the Zorktech brand guide arrives.
+//
+// Every colour, font, size, radius and shadow used anywhere in the app resolves
+// back to a variable declared here. Nothing downstream hardcodes a hex code or
+// a font name, so applying the brand guide is an edit to this file only — not a
+// sweep through every component.
+//
+// Values below are NEUTRAL PLACEHOLDERS, deliberately bland so that anything
+// still unbranded is obvious on screen. Replace them with the guide's values.
+// =============================================================================
+
+:root {
+  // ---------------------------------------------------------------------------
+  // 1. BRAND PALETTE  <- replace with the hex codes from the brand guide
+  // ---------------------------------------------------------------------------
+  --brand-primary:          #2f4a6d;  // PLACEHOLDER primary
+  --brand-primary-hover:    #263d5a;
+  --brand-primary-active:   #1e3148;
+  --brand-primary-subtle:   #eef2f7;  // tinted background for primary surfaces
+  --brand-on-primary:       #ffffff;  // text/icon colour on top of primary
+
+  --brand-secondary:        #4a7a8c;  // PLACEHOLDER secondary
+  --brand-secondary-subtle: #eef5f7;
+  --brand-on-secondary:     #ffffff;
+
+  --brand-accent:           #c2833a;  // PLACEHOLDER accent
+  --brand-accent-subtle:    #fdf5ea;
+  --brand-on-accent:        #ffffff;
+
+  // ---------------------------------------------------------------------------
+  // 2. NEUTRALS — greys for text, borders, backgrounds
+  // ---------------------------------------------------------------------------
+  --neutral-0:   #ffffff;
+  --neutral-25:  #fcfcfd;
+  --neutral-50:  #f7f8fa;
+  --neutral-100: #eef0f4;
+  --neutral-200: #e0e3ea;
+  --neutral-300: #c8cdd8;
+  --neutral-400: #9aa2b1;
+  --neutral-500: #6f7889;
+  --neutral-600: #545c6b;
+  --neutral-700: #3d4451;
+  --neutral-800: #292e38;
+  --neutral-900: #171b22;
+
+  // ---------------------------------------------------------------------------
+  // 3. STATUS COLOURS — used by badges, toasts, validation, chart series
+  //    The brand guide may define its own; if not these stay.
+  // ---------------------------------------------------------------------------
+  --status-success:         #1f7a4d;
+  --status-success-subtle:  #e8f5ee;
+  --status-warning:         #96690d;
+  --status-warning-subtle:  #fdf4e3;
+  --status-danger:          #b3261e;
+  --status-danger-subtle:   #fdeceb;
+  --status-info:            #1d5fa8;
+  --status-info-subtle:     #eaf2fc;
+  --status-neutral:         var(--neutral-600);
+  --status-neutral-subtle:  var(--neutral-100);
+
+  // ---------------------------------------------------------------------------
+  // 4. SEMANTIC SURFACES — components reference THESE, not the raw palette,
+  //    so a dark theme later is a re-map here rather than a rewrite.
+  // ---------------------------------------------------------------------------
+  --surface-app:            var(--neutral-50);   // page background
+  --surface-card:           var(--neutral-0);    // cards, panels, modals
+  --surface-raised:         var(--neutral-0);    // dropdowns, popovers
+  --surface-sunken:         var(--neutral-100);  // table headers, wells
+  --surface-hover:          var(--neutral-50);
+  --surface-selected:       var(--brand-primary-subtle);
+  --surface-overlay:        rgb(23 27 34 / 55%); // modal scrim
+
+  --text-primary:           var(--neutral-900);
+  --text-secondary:         var(--neutral-600);
+  --text-muted:             var(--neutral-500);
+  --text-disabled:          var(--neutral-400);
+  --text-inverse:           var(--neutral-0);
+  --text-link:              var(--brand-primary);
+
+  --border-subtle:          var(--neutral-200);
+  --border-default:         var(--neutral-300);
+  --border-strong:          var(--neutral-400);
+  --border-focus:           var(--brand-primary);
+
+  // ---------------------------------------------------------------------------
+  // 5. TYPOGRAPHY  <- replace families + scale with the brand guide
+  // ---------------------------------------------------------------------------
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+               Helvetica, Arial, sans-serif;           // PLACEHOLDER body face
+  --font-display: var(--font-sans);                    // PLACEHOLDER heading face
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo,
+               Consolas, monospace;                    // IDs, codes, amounts
+
+  // Type scale. Sizes in rem so browser zoom behaves.
+  --font-size-2xs:  0.6875rem;  // 11px — table micro-labels
+  --font-size-xs:   0.75rem;    // 12px — captions, badges
+  --font-size-sm:   0.8125rem;  // 13px — dense table body
+  --font-size-base: 0.875rem;   // 14px — default UI text (internal tools read dense)
+  --font-size-md:   1rem;       // 16px — emphasised body
+  --font-size-lg:   1.125rem;   // 18px — card titles
+  --font-size-xl:   1.375rem;   // 22px — section headings
+  --font-size-2xl:  1.75rem;    // 28px — page titles
+  --font-size-3xl:  2.25rem;    // 36px — KPI figures
+
+  --font-weight-regular:  400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:   1.2;
+  --line-height-snug:    1.35;
+  --line-height-normal:  1.5;
+  --line-height-relaxed: 1.65;
+
+  --letter-spacing-tight:  -0.01em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide:   0.04em;   // uppercase eyebrow labels
+
+  // ---------------------------------------------------------------------------
+  // 6. SPACING — 4px base step. Every margin/padding uses a step, never a
+  //    one-off pixel value, so density stays consistent across screens.
+  // ---------------------------------------------------------------------------
+  --space-0:  0;
+  --space-1:  0.25rem;   //  4px
+  --space-2:  0.5rem;    //  8px
+  --space-3:  0.75rem;   // 12px
+  --space-4:  1rem;      // 16px
+  --space-5:  1.25rem;   // 20px
+  --space-6:  1.5rem;    // 24px
+  --space-8:  2rem;      // 32px
+  --space-10: 2.5rem;    // 40px
+  --space-12: 3rem;      // 48px
+  --space-16: 4rem;      // 64px
+
+  // ---------------------------------------------------------------------------
+  // 7. RADII + ELEVATION  <- brand guide often specifies corner radius
+  // ---------------------------------------------------------------------------
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   10px;
+  --radius-xl:   14px;
+  --radius-full: 9999px;
+
+  --shadow-xs: 0 1px 2px rgb(23 27 34 / 6%);
+  --shadow-sm: 0 1px 3px rgb(23 27 34 / 8%), 0 1px 2px rgb(23 27 34 / 4%);
+  --shadow-md: 0 4px 10px rgb(23 27 34 / 8%), 0 2px 4px rgb(23 27 34 / 4%);
+  --shadow-lg: 0 12px 28px rgb(23 27 34 / 12%), 0 4px 8px rgb(23 27 34 / 5%);
+  --shadow-focus: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 28%, transparent);
+
+  // ---------------------------------------------------------------------------
+  // 8. LAYOUT CONSTANTS
+  // ---------------------------------------------------------------------------
+  --shell-sidebar-width:           248px;
+  --shell-sidebar-width-collapsed: 64px;
+  --shell-topbar-height:           56px;
+  --shell-content-max-width:       1680px;
+
+  // ---------------------------------------------------------------------------
+  // 9. MOTION — kept short; internal tools get used all day, long animations
+  //    stop feeling premium by the fiftieth click.
+  // ---------------------------------------------------------------------------
+  --duration-instant: 80ms;
+  --duration-fast:    140ms;
+  --duration-normal:  220ms;
+  --easing-standard:  cubic-bezier(0.2, 0, 0.13, 1);
+  --easing-decelerate: cubic-bezier(0, 0, 0.2, 1);
+
+  --z-sticky:  100;
+  --z-dropdown: 400;
+  --z-overlay: 800;
+  --z-modal:   900;
+  --z-toast:   1000;
+  --z-gate:    9999;
+}
+
+// Respect the OS setting for users who ask for less motion.
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-instant: 0ms;
+    --duration-fast:    0ms;
+    --duration-normal:  0ms;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// BREAKPOINTS — SCSS values (cannot live in CSS custom properties, media
+// queries can't read them). Desktop and tablet only, per the brief.
+// -----------------------------------------------------------------------------
+$breakpoint-gate:    900px;   // below this the app is blocked entirely
+$breakpoint-tablet:  1024px;  // tablet landscape / small laptop
+$breakpoint-desktop: 1280px;
+$breakpoint-wide:    1600px;

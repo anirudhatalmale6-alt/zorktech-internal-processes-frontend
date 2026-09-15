@@ -1,0 +1,7 @@
+{
+  "apiBaseUrl": "/api",
+  "environmentLabel": "local",
+  "showEnvironmentRibbon": true,
+  "minViewportWidth": 900,
+  "tokenRefreshLeewaySeconds": 60
+}

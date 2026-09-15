@@ -1,0 +1,57 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+
+<div class="shell" [class.shell--collapsed]="collapsed()">
+  <zt-sidebar
+    class="shell__sidebar"
+    [sections]="sections()"
+    [collapsed]="collapsed()"
+    (toggle)="toggleSidebar()"
+  />
+
+  <div class="shell__main">
+    <header class="topbar">
+      <div class="topbar__left">
+        @if (showRibbon) {
+          <span class="env-chip">{{ environmentLabel }}</span>
+        }
+      </div>
+
+      <div class="topbar__right">
+        <div class="user-menu">
+          <button
+            type="button"
+            class="user-menu__trigger"
+            (click)="toggleUserMenu()"
+            [attr.aria-expanded]="userMenuOpen()"
+            aria-haspopup="menu"
+          >
+            <span class="user-menu__avatar" aria-hidden="true">{{ initials() }}</span>
+            <span class="user-menu__name">{{ displayName() }}</span>
+            <svg class="user-menu__caret" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+
+          @if (userMenuOpen()) {
+            <!--
+              Backdrop catches the outside click. A plain (document:click)
+              listener would fire on the trigger too and immediately reopen
+              what it just closed.
+            -->
+            <div class="user-menu__backdrop" (click)="closeUserMenu()"></div>
+
+            <div class="user-menu__panel" role="menu">
+              <button type="button" class="user-menu__item" role="menuitem" (click)="logout()">
+                Sign out
+              </button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <main class="content" id="main-content" tabindex="-1">
+      <router-outlet />
+    </main>
+  </div>
+</div>

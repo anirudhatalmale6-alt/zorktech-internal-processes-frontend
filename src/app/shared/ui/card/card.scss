@@ -1,0 +1,57 @@
+@use '../../../../styles/typography' as type;
+
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+
+.card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.card__heading {
+  min-width: 0;
+}
+
+.card__title {
+  @include type.card-title;
+}
+
+.card__subtitle {
+  @include type.caption;
+
+  margin-top: var(--space-1);
+}
+
+.card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.card__body {
+  flex: 1;
+  min-width: 0;
+  padding: var(--space-5);
+}
+
+.card--flush .card__body {
+  padding: 0;
+}

@@ -1,0 +1,92 @@
+<div class="table-wrap">
+  <!--
+    CSS grid rather than <table> display so sticky headers and per-column
+    sizing behave predictably. role="table" and friends keep it announced as a
+    table to assistive tech, which a div soup otherwise loses entirely.
+  -->
+  <div class="table" role="table" [style.grid-template-columns]="gridTemplate()">
+    <div class="table__head" role="rowgroup">
+      <div class="table__row table__row--head" role="row">
+        @for (column of columns(); track column.key) {
+          <div
+            class="table__cell table__cell--head"
+            [class.table__cell--right]="column.align === 'right'"
+            [class.table__cell--center]="column.align === 'center'"
+            [class.table__cell--sortable]="column.sortable"
+            role="columnheader"
+            [attr.aria-sort]="ariaSortFor(column)"
+            (click)="onHeaderClick(column)"
+          >
+            <span class="table__head-label">{{ column.label }}</span>
+
+            @if (column.sortable) {
+              <svg
+                class="table__sort"
+                [class.table__sort--active]="sort()?.key === column.key"
+                [class.table__sort--desc]="
+                  sort()?.key === column.key && sort()?.direction === 'desc'
+                "
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path fill="currentColor" d="m12 8 4 5H8l4-5z" />
+              </svg>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="table__body" role="rowgroup">
+      @if (loading()) {
+        @for (placeholder of skeletonRows; track placeholder) {
+          <div class="table__row" role="row" aria-hidden="true">
+            @for (column of columns(); track column.key) {
+              <div class="table__cell" role="cell">
+                <span class="skeleton"></span>
+              </div>
+            }
+          </div>
+        }
+      } @else {
+        @for (row of rows(); track trackRow($index, row)) {
+          <div
+            class="table__row table__row--clickable"
+            role="row"
+            tabindex="0"
+            (click)="rowClick.emit(row)"
+            (keydown.enter)="rowClick.emit(row)"
+            (keydown.space)="rowClick.emit(row)"
+          >
+            @for (column of columns(); track column.key) {
+              <div
+                class="table__cell"
+                [class.table__cell--right]="column.align === 'right'"
+                [class.table__cell--center]="column.align === 'center'"
+                [class.u-numeric]="column.align === 'right'"
+                role="cell"
+              >
+                @if (templateFor(column.key); as cellTemplate) {
+                  <ng-container
+                    [ngTemplateOutlet]="cellTemplate"
+                    [ngTemplateOutletContext]="{ $implicit: row, column: column }"
+                  />
+                } @else {
+                  <span class="u-truncate">{{ display(row, column) }}</span>
+                }
+              </div>
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  @if (!loading() && rows().length === 0) {
+    <zt-empty-state
+      [title]="emptyTitle()"
+      [description]="emptyDescription()"
+      [filtered]="filtered()"
+    />
+  }
+</div>

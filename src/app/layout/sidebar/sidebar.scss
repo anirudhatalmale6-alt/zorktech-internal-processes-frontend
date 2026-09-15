@@ -1,0 +1,190 @@
+@use '../../../styles/tokens' as tokens;
+@use '../../../styles/typography' as type;
+
+:host {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--brand-primary);
+  color: var(--brand-on-primary);
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: var(--shell-topbar-height);
+  padding-inline: var(--space-4);
+  flex-shrink: 0;
+}
+
+.sidebar__logo {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--brand-primary);
+  background: var(--brand-on-primary);
+  border-radius: var(--radius-sm);
+}
+
+.sidebar__wordmark {
+  @include type.truncate;
+
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-3) var(--space-6);
+}
+
+.nav-section + .nav-section {
+  margin-top: var(--space-6);
+}
+
+.nav-section__title {
+  @include type.eyebrow;
+  @include type.truncate;
+
+  padding-inline: var(--space-3);
+  margin-bottom: var(--space-2);
+  // The rail sits on the brand colour, so the muted grey from the token set
+  // would be unreadable here. Derive from the on-primary colour instead.
+  color: color-mix(in srgb, var(--brand-on-primary) 55%, transparent);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: color-mix(in srgb, var(--brand-on-primary) 82%, transparent);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  text-decoration: none;
+  transition:
+    background var(--duration-fast) var(--easing-standard),
+    color var(--duration-fast) var(--easing-standard);
+
+  &:hover {
+    background: color-mix(in srgb, var(--brand-on-primary) 10%, transparent);
+    color: var(--brand-on-primary);
+    text-decoration: none;
+  }
+}
+
+.nav-item--active {
+  background: color-mix(in srgb, var(--brand-on-primary) 16%, transparent);
+  color: var(--brand-on-primary);
+}
+
+.nav-item__icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.nav-item__label {
+  @include type.truncate;
+
+  flex: 1;
+}
+
+.nav-item__badge {
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.25rem;
+  color: var(--brand-primary);
+  background: var(--brand-on-primary);
+  border-radius: var(--radius-full);
+}
+
+.sidebar__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4);
+  color: color-mix(in srgb, var(--brand-on-primary) 70%, transparent);
+  font-size: var(--font-size-xs);
+  border-top: 1px solid color-mix(in srgb, var(--brand-on-primary) 14%, transparent);
+
+  &:hover {
+    color: var(--brand-on-primary);
+  }
+}
+
+.sidebar__toggle-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  transition: transform var(--duration-normal) var(--easing-standard);
+}
+
+.sidebar__toggle-label {
+  @include type.truncate;
+}
+
+// ── Collapsed rail ───────────────────────────────────────────────────────────
+//
+// A mixin, because the rail is entered two different ways: by the user
+// clicking Collapse, and by the tablet breakpoint. Attaching these rules to
+// the class alone left the tablet layout with a narrow rail still trying to
+// render its section headings, which truncated them to "O…" and "A…" —
+// visible nonsense rather than a clean icon rail.
+//
+// Labels are display:none rather than merely clipped, so a screen reader does
+// not announce invisible text. The `title` attribute set in the template
+// carries the accessible name in the collapsed state.
+@mixin collapsed-rail {
+  .sidebar__wordmark,
+  .nav-item__label,
+  .nav-item__badge,
+  .sidebar__toggle-label {
+    display: none;
+  }
+
+  .nav-section__title {
+    // Keeps the rhythm between groups without a truncated one-letter heading.
+    height: 1px;
+    margin-bottom: var(--space-3);
+    overflow: hidden;
+    color: transparent;
+    background: color-mix(in srgb, var(--brand-on-primary) 16%, transparent);
+  }
+
+  .sidebar__brand,
+  .nav-item,
+  .sidebar__toggle {
+    justify-content: center;
+    padding-inline: var(--space-2);
+  }
+
+  .sidebar__toggle-icon {
+    transform: rotate(180deg);
+  }
+}
+
+:host(.sidebar--collapsed) {
+  @include collapsed-rail;
+}
+
+@media (max-width: tokens.$breakpoint-tablet) {
+  :host {
+    @include collapsed-rail;
+  }
+}

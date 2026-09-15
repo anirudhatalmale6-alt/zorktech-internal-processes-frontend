@@ -1,0 +1,48 @@
+// =============================================================================
+// GLOBAL STYLESHEET
+//
+// Order matters: tokens must be declared before anything consumes them.
+// Component styles live with their components — only truly global rules
+// belong in this file.
+// =============================================================================
+
+@use 'styles/tokens';
+@use 'styles/reset';
+@use 'styles/typography' as type;
+@use 'styles/controls';
+
+// -----------------------------------------------------------------------------
+// App-level helpers used across features.
+// -----------------------------------------------------------------------------
+
+.u-visually-hidden {
+  @include type.visually-hidden;
+}
+
+.u-truncate {
+  @include type.truncate;
+}
+
+.u-numeric {
+  @include type.numeric;
+}
+
+// Skip link for keyboard users — first tab stop on the page.
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: var(--z-toast);
+  padding: var(--space-2) var(--space-4);
+  background: var(--surface-card);
+  color: var(--text-link);
+  border: 1px solid var(--border-focus);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast) var(--easing-standard);
+
+  &:focus-visible {
+    transform: translateY(0);
+  }
+}
